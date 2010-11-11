@@ -1,0 +1,38 @@
+*{margin:0;padding:0;}
+#slideshare{
+  width:320px;
+  padding:10px;
+  position:relative;
+}
+#fwd{
+  position:absolute;
+  right:10px;
+}
+#count{
+  padding-left:50px;
+}
+input{
+  font-weight:bold;
+  border:none;
+  background:none;
+  color:#fff;
+  background:#333;
+  margin:0 5px;
+  padding:2px;
+  -moz-border-radius:3px;
+  -webkit-border-radius:3px;
+  border-radius:3px;
+}
+form{
+  font-family:helvetica,arial,sans-serif;
+  background:#ccc;
+  padding-bottom:5px;
+  font-size:12px;
+  font-weight:bold;
+}
+input:hover{
+  background:#393;
+}
+input[disabled]{
+  background:#aaa;
+}
