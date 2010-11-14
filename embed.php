@@ -53,6 +53,12 @@ YUI().use('node', function(Y) {
       all = <?php echo $num;?>,
       img = Y.one('#slide'),
       url = img.get('src').replace(/\d\.jpg/,'');
+      for(var i=2;i<10;i++){
+        var cacheimg = document.createElement('img');
+        cacheimg.setAttribute('src',url+i+'.jpg');
+        cacheimg.className = 'preload';
+        document.body.appendChild(cacheimg);
+      }
   Y.one('#slideshare').delegate('click',function(event){
     var id = this.get('id');
     switch(id){
@@ -75,6 +81,12 @@ YUI().use('node', function(Y) {
     } else {
       Y.one('#first').removeAttribute('disabled');
       Y.one('#prev').removeAttribute('disabled');
+    }
+    if(current > 9){
+      var cacheimg = document.createElement('img');
+      cacheimg.setAttribute('src',url+i+'.jpg');
+      cacheimg.className = 'preload';
+      document.body.appendChild(cacheimg);
     }
     img.set('src',url + current + '.jpg');
   },'input');

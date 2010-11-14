@@ -50,7 +50,7 @@
 <iframe src="embed.php?url=<?php echo $url;?>"></iframe>
 <h2><span>3</span> Your embed for copy+paste:</h2>
 <form><textarea>
-&lt;iframe src="http://icant.co.uk/slidesharehtml/embed.php?url=<?php echo $url;?>"&gt;&lt;/iframe&gt;
+&lt;iframe style="border:none;width:500px;height:300px;" src="http://icant.co.uk/slidesharehtml/embed.php?url=<?php echo $url;?>"&gt;&lt;/iframe&gt;
 </textarea></form>
 <?php } if($url=='error') {?>
   <p class="error">This is not a valid Slideshare url it seems :(</p>
@@ -58,7 +58,7 @@
 
   </div>
   <div id="ft" role="contentinfo">
-    <p>Written by <a href="http://wait-till-i.com">Chris Heilmann</a></p>
+    <p>Written by <a href="http://wait-till-i.com">Chris Heilmann</a> - host this yourself <a href="https://github.com/codepo8/slidesharehtml">source is on GitHub</a></p>
   </div>
 </div>
 </body>

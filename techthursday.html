@@ -1,0 +1,46 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
+  <title>Things that made me happy generator</title>
+  <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.8.0/build/reset-fonts-grids/reset-fonts-grids.css&2.8.0/build/base/base-min.css">
+  <style type="text/css">
+textarea{width:600px;height:200px;padding:10px;-moz-box-shadow:5px 5px 2em rgba(0,0,0,.5);-webkit-box-shadow:5px 5px 2em rgba(0,0,0,.5);box-shadow:5px 5px 2em rgba(0,0,0,.5);display:block;margin:2em 0;border:none;background:#eee;}
+  </style>
+</head>
+<body class="yui-skin-sam">
+<div id="doc" class="yui-t7">
+
+  <div id="hd" role="banner">
+    <h1><del>Yahoo TechThursday</del><ins>TTMMHTM</ins> generator</h1>
+  </div>
+  <div id="bd" role="main">
+    <ul id="results"></ul>
+    <textarea id="copy"></textarea>
+  </div>
+  <div id="ft" role="contentinfo">
+    <p>Written by <a href="http://twitter.com/codepo8">Chris Heilmann</a></p>
+  </div>
+</div>
+<script>
+  function ttmmhtm(o){
+    var out = document.getElementById('results'),
+        cpy = document.getElementById('copy'),
+        html = '',
+        disp = '',
+        n,i,j;
+    for(i=0,j=o.length;i<j;i++){
+      n = o[i].n.replace('}','</a>');
+      n = n.replace('{','<a href="'+o[i].u+'">');
+      html+='<li>'+n+'</li>';
+    }
+    out.innerHTML = html;
+    html = html.replace(/</g,'&lt;');
+    html = html.replace(/>/g,'&gt;');
+    cpy.innerHTML = '&lt;ul&gt;'+html+'&lt;/ul&gt;';
+  }
+</script>
+<script type="text/javascript" src="http://feeds.delicious.com/v2/json/codepo8/4ydn?count=50&callback=ttmmhtm">
+</script>
+</body>
+</html>
