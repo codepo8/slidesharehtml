@@ -9,11 +9,16 @@
 */
 if(!ob_start("ob_gzhandler")) ob_start();
 error_reporting(0);
+$width = intval($_GET['width']) ? intval($_GET['width']) : 320;
+$large = '';
+if($width > 320){
+  $large = '&big=1';
+}
 $url = $_GET['url'];
 $url = preg_replace('/.net\//','.net/mobile/',$url);
 $ch = curl_init(); 
 curl_setopt($ch, CURLOPT_URL, $url); 
-curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Linux; U; Android 2.1-update1; de-de; HTC Desire 1.19.161.5 Build/ERE27) AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0 Mobile Safari/530.17");
+curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314 Safari/531.21.10");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 $images = curl_exec($ch); 
 curl_close($ch);
@@ -28,12 +33,65 @@ $yay = ($num && $slides);
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
   <title>HTML Slideshare embed</title>
-  <link rel="stylesheet" href="slidesharehtml.css" type="text/css">
+  <style type="text/css">
+  *{margin:0;padding:0;}
+  #slideshare{
+    float:left;
+    min-width:<?php echo $width;?>px;
+    min-height:200px;
+    margin:10px;
+    position:relative;
+    -moz-box-shadow:2px 2px 10px rgba(0,0,0,.6);
+    -webkit-box-shadow:2px 2px 10px rgba(0,0,0,.6);
+    -o-box-shadow:2px 2px 10px rgba(0,0,0,.6);
+    box-shadow:2px 2px 10px rgba(0,0,0,.6);
+  }
+  .preload{
+    position:absolute;
+    left:-20000px;
+    top:-2000px;
+  }
+  #fwd{
+    position:absolute;
+    right:10px;
+  }
+  #count{
+    position:absolute;
+    left:48%;
+    bottom:5px;
+    display:block;
+  }
+  input{
+    font-weight:bold;
+    border:none;
+    background:none;
+    color:#fff;
+    background:#333;
+    margin:0 5px;
+    padding:2px;
+    -moz-border-radius:3px;
+    -webkit-border-radius:3px;
+    border-radius:3px;
+  }
+  form{
+    font-family:helvetica,arial,sans-serif;
+    background:#ccc;
+    padding-bottom:5px;
+    font-size:12px;
+    font-weight:bold;
+  }
+  input:hover{
+    background:#393;
+  }
+  input[disabled]{
+    background:#aaa;
+  }
+  </style>
 </head>
 <body>
 <?php if($yay){ ?>
 <div id="slideshare"><form>
-  <img id="slide" src="<?php echo $slides;?>-slide-1.jpg" alt="">
+  <img id="slide" src="<?php echo $slides;?>-slide-1.jpg<?php echo $large;?>" alt="" width="<?php echo $width;?>">
   <div>
     <span id="back">
       <input type="button" id="first" value="first" disabled="disabled">
@@ -52,10 +110,10 @@ YUI().use('node', function(Y) {
   var current = 1,
       all = <?php echo $num;?>,
       img = Y.one('#slide'),
-      url = img.get('src').replace(/\d\.jpg/,'');
+      url = img.get('src').replace(/\d\.jpg<?php echo $large;?>/,'');
       for(var i=2;i<10;i++){
         var cacheimg = document.createElement('img');
-        cacheimg.setAttribute('src',url+i+'.jpg');
+        cacheimg.setAttribute('src',url+i+'.jpg<?php echo $large;?>');
         cacheimg.className = 'preload';
         document.body.appendChild(cacheimg);
       }
@@ -84,11 +142,15 @@ YUI().use('node', function(Y) {
     }
     if(current > 9){
       var cacheimg = document.createElement('img');
-      cacheimg.setAttribute('src',url+i+'.jpg');
+      cacheimg.setAttribute('src',url+(current+1)+'.jpg<?php echo $large;?>');
       cacheimg.className = 'preload';
       document.body.appendChild(cacheimg);
+      var cacheimg2 = document.createElement('img');
+      cacheimg2.setAttribute('src',url+(current+2)+'.jpg<?php echo $large;?>');
+      cacheimg2.className = 'preload';
+      document.body.appendChild(cacheimg2);
     }
-    img.set('src',url + current + '.jpg');
+    img.set('src',url + current + '.jpg<?php echo $large;?>');
   },'input');
 });
 </script>
