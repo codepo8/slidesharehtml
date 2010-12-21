@@ -8,11 +8,6 @@
   -o-box-shadow:2px 2px 10px rgba(0,0,0,.6);
   box-shadow:2px 2px 10px rgba(0,0,0,.6);
 }
-.preload{
-  position:absolute;
-  left:-20000px;
-  top:-2000px;
-}
 #fwd{
   position:absolute;
   right:10px;
