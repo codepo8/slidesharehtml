@@ -123,15 +123,11 @@ $yay = ($num && $slides);
   </div>
   <div>
     <span id="back">
-      <!-- 
-        <input type="button" id="first" value="first" disabled="disabled"> 
-      -->
       <input type="button" id="prev" value="&#x25C0;">
     </span>
     <span id="count"><input type="text" id="current" value="1" name="current"> / <?php echo $num;?></span>
     <span id="fwd">
-      <input type="button" value="&#x25B6;" id="next">
-      <!-- <input type="button" value="last" id="last"> -->
+      <input type="button" value="next" id="&#x25B6;">
     </span>
   </div>
 </form></div>
