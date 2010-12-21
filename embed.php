@@ -87,6 +87,7 @@ $yay = ($num && $slides);
     position:absolute;
     top:<?php echo intval($width/2.7);?>px;
     right:0;
+    width:3em;
   }
   #inprev{
     left:0;
@@ -125,11 +126,11 @@ $yay = ($num && $slides);
       <!-- 
         <input type="button" id="first" value="first" disabled="disabled"> 
       -->
-      <input type="button" id="prev" value="previous">
+      <input type="button" id="prev" value="&#x25C0;">
     </span>
     <span id="count"><input type="text" id="current" value="1" name="current"> / <?php echo $num;?></span>
     <span id="fwd">
-      <input type="button" value="next" id="next">
+      <input type="button" value="&#x25B6;" id="next">
       <!-- <input type="button" value="last" id="last"> -->
     </span>
   </div>

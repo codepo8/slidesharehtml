@@ -24,12 +24,14 @@
   textarea{padding:10px;width:700px;border:none;
   -webkit-box-shadow:0px 0px 20px rgba(33,123,232,.8);
   -moz-box-shadow:0px 0px 20px rgba(33,123,232,.8)
+  box-shadow:0px 0px 20px rgba(33,123,232,.8)
   }
 
   html,body{background:#9cf;color:#000}
   #doc{background:#fff;border:1em solid #fff;
   -moz-box-shadow:2px 2px 10px rgba(0,0,0,.8);
   -webkit-box-shadow:2px 2px 10px rgba(0,0,0,.8)
+  box-shadow:2px 2px 10px rgba(0,0,0,.8);
   }
   label span{font-size:80%;color:#666;display:block;}
   #url{width:20em;}
@@ -44,7 +46,7 @@
   form div{padding-bottom:5px;overflow:hidden;}
   h2{color:#333;margin:2em 0;}
   .error{color:#c00;margin:2em 0;font-weight:bold;}
-  h2 span{color:#fff;background:#393;-moz-border-radius:20px;padding:10px 15px;}
+  h2 span{color:#fff;background:#393;-moz-border-radius:20px;-webkit--border-radius:20px;border-radius:20px;padding:10px 15px;}
   a{color:#369;}  </style>
 </head>
 <body class="yui-skin-sam">
