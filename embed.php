@@ -1,6 +1,7 @@
 <?php
 /*
   Slideshare HTML Version
+  Uses YQL for scraping and conversion
   Homepage: http://github.com/codepo8/slidesharehtml
   Copyright (c) 2010 Christian Heilmann
   Code licensed under the BSD License:
@@ -10,10 +11,6 @@ if(!ob_start("ob_gzhandler")) ob_start();
 error_reporting(0);
 $current = intval($_GET['current']) ? intval($_GET['current']) : 1;
 $width = intval($_GET['width']) ? intval($_GET['width']) : 320;
-$large = '';
-if($width > 320){
-  $large = '&big=1';
-}
 $url='http://www.slideshare.net/api/oembed/1?url='.$_GET['url'].'&format=json';
 $ch = curl_init(); 
 curl_setopt($ch, CURLOPT_URL, $url); 
@@ -193,11 +190,11 @@ YUI().use('node','event-key', function(Y) {
     }
     if(current > 9){
       var cacheimg = document.createElement('img');
-      cacheimg.setAttribute('src',url+(current+1)+'<?php echo $large;?>');
+      cacheimg.setAttribute('src',url+(current+1)+'<?php echo $suffix;?>');
       cacheimg.className = 'preload';
       document.body.appendChild(cacheimg);
       var cacheimg2 = document.createElement('img');
-      cacheimg2.setAttribute('src',url+(current+2)+'<?php echo $large;?>');
+      cacheimg2.setAttribute('src',url+(current+2)+'<?php echo $suffix;?>');
       cacheimg2.className = 'preload';
       document.body.appendChild(cacheimg2);
     }
