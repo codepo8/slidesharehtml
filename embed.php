@@ -1,7 +1,6 @@
 <?php
 /*
   Slideshare HTML Version
-  Uses YQL for scraping and conversion
   Homepage: http://github.com/codepo8/slidesharehtml
   Copyright (c) 2010 Christian Heilmann
   Code licensed under the BSD License:
@@ -15,18 +14,16 @@ $large = '';
 if($width > 320){
   $large = '&big=1';
 }
-$url = $_GET['url'];
-$url = preg_replace('/.net\//','.net/mobile/',$url);
+$url='http://www.slideshare.net/api/oembed/1?url='.$_GET['url'].'&format=json';
 $ch = curl_init(); 
 curl_setopt($ch, CURLOPT_URL, $url); 
-curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0(iPad; U; CPU iPhone OS 3_2 like Mac OS X; en-us) AppleWebKit/531.21.10 (KHTML, like Gecko) Version/4.0.4 Mobile/7B314 Safari/531.21.10");
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 $images = curl_exec($ch); 
 curl_close($ch);
-preg_match_all('/"baseSlideUrl":"([^"]+)"/',$images,$slides);
-preg_match_all('/"totalSlides":(\d+),/',$images,$numbers);
-$num = $numbers[1][0];
-$slides = $slides[1][0];
+$data = json_decode($images);
+$num = $data->total_slides;
+$suffix = $data->slide_image_baseurl_suffix;
+$slides = $data->slide_image_baseurl;
 $yay = ($num && $slides);
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -61,6 +58,7 @@ $yay = ($num && $slides);
     left:42%;
     bottom:5px;
     display:block;
+    font-weight:bold;
   }
   input{
     font-weight:bold;
@@ -106,7 +104,13 @@ $yay = ($num && $slides);
     background:#000;
     color:#333;
   }
-  #current{width:3em;text-align:center;background:#fff;color:#000;}
+  input#current{
+    width:3em;
+    text-align:center;
+    background:#fff;
+    color:#000;
+    font-weight:bold;
+  }
   </style>
 </head>
 <body>
@@ -117,7 +121,7 @@ $yay = ($num && $slides);
 ?>
 
 <div id="slideshare"><form id="f"><div id="img">
-  <img id="slide" src="<?php echo $slides;?>-slide-<?php echo $current;?>.jpg<?php echo $large;?>" alt="" width="<?php echo $width;?>">
+  <img id="slide" src="<?php echo $slides;?>-slide-<?php echo $current;?><?php echo $suffix;?>" alt="" width="<?php echo $width;?>">
   <input type="button" id="innext" class="inner" value="&#x25B6;">
   <input type="button" id="inprev" class="inner" value="&#x25C0;">
   </div>
@@ -127,20 +131,20 @@ $yay = ($num && $slides);
     </span>
     <span id="count"><input type="text" id="current" value="1" name="current"> / <?php echo $num;?></span>
     <span id="fwd">
-      <input type="button" value="next" id="&#x25B6;">
+      <input type="button" value="&#x25B6;" id="next">
     </span>
   </div>
 </form></div>
-<script src="http://yui.yahooapis.com/combo?3.2.0pr1/build/yui/yui-min.js"></script>
+<script src="http://yui.yahooapis.com/3.3.0/build/yui/yui-min.js"></script>
 <script>
-YUI().use('node', function(Y) {
+YUI().use('node','event-key', function(Y) {
   var current = <?php echo $current;?>,
       all = <?php echo $num;?>,
       img = Y.one('#slide'),
-      url = img.get('src').replace(/\d+\.jpg<?php echo $large;?>/,'');
+      url = img.get('src').replace(/\d+\<?php echo $suffix;?>/,'');
   for(var i=2;i<10;i++){
     var cacheimg = document.createElement('img');
-    cacheimg.setAttribute('src',url+i+'.jpg<?php echo $large;?>');
+    cacheimg.setAttribute('src',url+i+'<?php echo $suffix;?>');
     cacheimg.className = 'preload';
     document.body.appendChild(cacheimg);
   }
@@ -157,51 +161,57 @@ YUI().use('node', function(Y) {
     }
     update(current);
   },'input');
-  function update(current){
+  Y.one('document').on('keydown',function(event){
+    var k = event.keyCode;
+    if(k === 37 || k === 39){
+      if(k===37){current--;}
+      if(k===39){current++}
+      update(current);
+    }
+  });
+
+  function update(c){
+    if(c <= 1){current = 1;}
+    if(c > all){current = all;}
+    if(current !== 1 && current !== all){
+      current = c;
+    }
     Y.one('#current').set('value',current);
     if(current === all){
-      /*Y.one('#last').set('disabled','disabled');*/
       Y.one('#next').set('disabled','disabled');
       Y.one('#innext').set('disabled','disabled');
     } else {
-      /* Y.one('#last').removeAttribute('disabled');*/
       Y.one('#next').removeAttribute('disabled');
       Y.one('#innext').removeAttribute('disabled');
     }
     if(current === 1){
-      /*Y.one('#first').set('disabled','disabled');*/
       Y.one('#prev').set('disabled','disabled');
       Y.one('#inprev').set('disabled','disabled');
     } else {
-      /*Y.one('#first').removeAttribute('disabled');*/
       Y.one('#prev').removeAttribute('disabled');
       Y.one('#inprev').removeAttribute('disabled');
     }
     if(current > 9){
       var cacheimg = document.createElement('img');
-      cacheimg.setAttribute('src',url+(current+1)+'.jpg<?php echo $large;?>');
+      cacheimg.setAttribute('src',url+(current+1)+'<?php echo $large;?>');
       cacheimg.className = 'preload';
       document.body.appendChild(cacheimg);
       var cacheimg2 = document.createElement('img');
-      cacheimg2.setAttribute('src',url+(current+2)+'.jpg<?php echo $large;?>');
+      cacheimg2.setAttribute('src',url+(current+2)+'<?php echo $large;?>');
       cacheimg2.className = 'preload';
       document.body.appendChild(cacheimg2);
     }
-    img.set('src',url + current + '.jpg<?php echo $large;?>');
+    img.set('src',url + current + '<?php echo $suffix;?>');
   };
   Y.on('blur',function(e){
     current = Y.one('#current').get('value');
-    if(current > 0 && current <= all){
-      update(current);
-    }
+    update(current);
     e.preventDefault();
     return false;
   },'#current');
   Y.on('submit',function(e){
     current = Y.one('#current').get('value');
-    if(current > 0 && current <= all){
-      update(current);
-    }
+    update(current);
     e.preventDefault();
     return false;
   },'#f');
