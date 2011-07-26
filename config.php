@@ -8,7 +8,7 @@
  * 2) Modify HOSTED_PATH to the relative path where you're hosting the slidesharehtml files
 */
 
-define('HOSTED_DOMAIN', 'http://icant.co.uk');
+define('HOSTED_DOMAIN', 'http://www.garygale.com');
 
 define('HOSTED_PATH', 'slidesharehtml');
 
