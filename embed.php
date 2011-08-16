@@ -24,12 +24,12 @@ $suffix = $data->slide_image_baseurl_suffix;
 $slides = $data->slide_image_baseurl;
 $yay = ($num && $slides);
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
+  <meta "charset=UTF-8">  
   <title>HTML Slideshare embed</title>
-  <style type="text/css">
+  <style>
   *{margin:0;padding:0;}
   #slideshare{
     float:left;
@@ -214,8 +214,6 @@ YUI().use('node','event-key', function(Y) {
         ctl.removeClass('loading');
       });
     }
-    // clear src to get more accurate load events.
-    //img.set('src', "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==");
     img.set('src',url + current + '<?php echo $suffix;?>');
   };
   Y.on('blur',function(e){
