@@ -11,6 +11,7 @@ if(!ob_start("ob_gzhandler")) ob_start();
 error_reporting(0);
 $current = intval($_GET['current']) ? intval($_GET['current']) : 1;
 $width = intval($_GET['width']) ? intval($_GET['width']) : 320;
+$height = $width * .76953125;
 $url='http://www.slideshare.net/api/oembed/1?url='.$_GET['url'].'&format=json';
 $ch = curl_init(); 
 curl_setopt($ch, CURLOPT_URL, $url); 
@@ -45,6 +46,9 @@ $yay = ($num && $slides);
     position:absolute;
     left:-20000px;
     top:-2000px;
+  }
+  #controls.loading { 
+    background: url(data:image/gif;base64,R0lGODlhEAALAPQAAP///wAAANra2tDQ0Orq6gYGBgAAAC4uLoKCgmBgYLq6uiIiIkpKSoqKimRkZL6+viYmJgQEBE5OTubm5tjY2PT09Dg4ONzc3PLy8ra2tqCgoMrKyu7u7gAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCwAAACwAAAAAEAALAAAFLSAgjmRpnqSgCuLKAq5AEIM4zDVw03ve27ifDgfkEYe04kDIDC5zrtYKRa2WQgAh+QQJCwAAACwAAAAAEAALAAAFJGBhGAVgnqhpHIeRvsDawqns0qeN5+y967tYLyicBYE7EYkYAgAh+QQJCwAAACwAAAAAEAALAAAFNiAgjothLOOIJAkiGgxjpGKiKMkbz7SN6zIawJcDwIK9W/HISxGBzdHTuBNOmcJVCyoUlk7CEAAh+QQJCwAAACwAAAAAEAALAAAFNSAgjqQIRRFUAo3jNGIkSdHqPI8Tz3V55zuaDacDyIQ+YrBH+hWPzJFzOQQaeavWi7oqnVIhACH5BAkLAAAALAAAAAAQAAsAAAUyICCOZGme1rJY5kRRk7hI0mJSVUXJtF3iOl7tltsBZsNfUegjAY3I5sgFY55KqdX1GgIAIfkECQsAAAAsAAAAABAACwAABTcgII5kaZ4kcV2EqLJipmnZhWGXaOOitm2aXQ4g7P2Ct2ER4AMul00kj5g0Al8tADY2y6C+4FIIACH5BAkLAAAALAAAAAAQAAsAAAUvICCOZGme5ERRk6iy7qpyHCVStA3gNa/7txxwlwv2isSacYUc+l4tADQGQ1mvpBAAIfkECQsAAAAsAAAAABAACwAABS8gII5kaZ7kRFGTqLLuqnIcJVK0DeA1r/u3HHCXC/aKxJpxhRz6Xi0ANAZDWa+kEAA7AAAAAAAAAAAA) no-repeat 80% 50%;
   }
   #fwd{
     position:absolute;
@@ -118,11 +122,15 @@ $yay = ($num && $slides);
 ?>
 
 <div id="slideshare"><form id="f"><div id="img">
-  <img id="slide" src="<?php echo $slides;?>-slide-<?php echo $current;?><?php echo $suffix;?>" alt="" width="<?php echo $width;?>">
+  <img id="slide" 
+    src="<?php echo $slides;?>-slide-<?php echo $current;?><?php echo $suffix;?>" 
+    alt="" 
+    width="<?php echo $width;?>"
+    height="<?php echo $height;?>">
   <input type="button" id="innext" class="inner" value="&#x25B6;">
   <input type="button" id="inprev" class="inner" value="&#x25C0;">
   </div>
-  <div>
+  <div id="controls">
     <span id="back">
       <input type="button" id="prev" value="&#x25C0;">
     </span>
@@ -138,6 +146,7 @@ YUI().use('node','event-key', function(Y) {
   var current = <?php echo $current;?>,
       all = <?php echo $num;?>,
       img = Y.one('#slide'),
+      ctl = Y.one('#controls'),
       url = img.get('src').replace(/\d+\<?php echo $suffix;?>/,'');
   for(var i=2;i<10;i++){
     var cacheimg = document.createElement('img');
@@ -198,6 +207,15 @@ YUI().use('node','event-key', function(Y) {
       cacheimg2.className = 'preload';
       document.body.appendChild(cacheimg2);
     }
+    
+    if ( current != 1){
+      ctl.addClass('loading');
+      img.on('load', function(event){
+        ctl.removeClass('loading');
+      });
+    }
+    // clear src to get more accurate load events.
+    //img.set('src', "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==");
     img.set('src',url + current + '<?php echo $suffix;?>');
   };
   Y.on('blur',function(e){
