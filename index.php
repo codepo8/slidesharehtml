@@ -1,4 +1,7 @@
 <?php
+
+  require('config.php');
+
   if(isset($_GET['url'])){
     if(!preg_match('/^http:\/\/www.slideshare.net/',$_GET['url'])){
     $url = 'error';
@@ -79,7 +82,7 @@
 <iframe style="border:none;width:<?php echo $fwidth;?>px;height:<?php echo $fheight;?>px;" src="embed.php?url=<?php echo $url;if($width>0){echo '&width='.$width;}if($current>0){echo '&current='.$current;}?>"></iframe>
 <h2><span>3</span> Your embed for copy+paste:</h2>
 <form><textarea>
-&lt;iframe style="border:none;width:<?php echo $fwidth;?>px;height:<?php echo $fheight;?>px;" src="http://icant.co.uk/slidesharehtml/embed.php?url=<?php echo $url;if($width>0){echo '&width='.$width;}?><?php if($current>0){echo '&current='.$current;}?>"&gt;&lt;/iframe&gt;
+&lt;iframe style="border:none;width:<?php echo $fwidth;?>px;height:<?php echo $fheight;?>px;" src="<?php echo SLIDESHAREHTML_URL;?>/embed.php?url=<?php echo $url;if($width>0){echo '&width='.$width;}?><?php if($current>0){echo '&current='.$current;}?>"&gt;&lt;/iframe&gt;
 </textarea></form>
 <?php } if($url=='error') {?>
   <p class="error">This is not a valid Slideshare url it seems :(</p>
